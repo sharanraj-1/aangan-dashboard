@@ -450,6 +450,27 @@ test('PUBLIC_EDIT=true removes the login from the dashboard (buttons work) but n
   }
 });
 
+test('production with no passwords stays locked unless PUBLIC_EDIT=true opts into a password-free demo', async () => {
+  const { NextRequest } = await import('next/server');
+  const { proxy } = await import('../proxy');
+  const keep = { DESIGNER_PASSWORD: process.env.DESIGNER_PASSWORD, FOUNDER_PASSWORD: process.env.FOUNDER_PASSWORD, PUBLIC_EDIT: process.env.PUBLIC_EDIT, NODE_ENV: process.env.NODE_ENV };
+  delete process.env.DESIGNER_PASSWORD;
+  delete process.env.FOUNDER_PASSWORD;
+  delete process.env.PUBLIC_EDIT;
+  Object.assign(process.env, { NODE_ENV: 'production' });
+  const run = (path: string, init: { method?: string; headers?: Record<string, string> } = {}) => proxy(new NextRequest(`https://x.test${path}`, init));
+  const hdr = (r: Response, n: string) => r.headers.get(`x-middleware-request-${n}`);
+  try {
+    assert.equal(run('/').status, 503, 'no passwords, no switch → refuses to serve');
+    process.env.PUBLIC_EDIT = 'true';
+    assert.equal(run('/').status, 200, 'PUBLIC_EDIT=true → open demo');
+    assert.equal(hdr(run('/?as=founder'), 'x-aangan-role'), 'founder');
+    assert.equal(hdr(run('/api/ingest/call', { method: 'POST' }), 'x-aangan-role'), null, 'machine endpoints still check their own bearer key');
+  } finally {
+    for (const [k, v] of Object.entries(keep)) { if (v === undefined) delete process.env[k]; else process.env[k] = v; }
+  }
+});
+
 // ---------------------------------------------------------------------------------------------
 console.log('\nVaani voice integration (simulated API, shaped like the documented responses)');
 const vcall = (id: string, over: Record<string, unknown> = {}) => ({

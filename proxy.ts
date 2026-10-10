@@ -44,9 +44,10 @@ export function proxy(req: NextRequest) {
   const founderPass = process.env.FOUNDER_PASSWORD;
   const prod = process.env.NODE_ENV === 'production';
 
-  // Local / demo: open, with a role switcher.
+  // Local / demo: open, with a role switcher. In production this needs an explicit PUBLIC_EDIT=true (a password-free
+  // demo deployment); otherwise the app refuses to serve without the passwords.
   if (!designerPass && !founderPass) {
-    if (prod) return new NextResponse('Dashboard locked: set DESIGNER_PASSWORD and FOUNDER_PASSWORD in the environment.', { status: 503 });
+    if (prod && process.env.PUBLIC_EDIT !== 'true') return new NextResponse('Dashboard locked: set DESIGNER_PASSWORD and FOUNDER_PASSWORD in the environment.', { status: 503 });
     const asParam = searchParams.get('as');
     const role = asParam === 'founder' || asParam === 'designer' ? asParam : req.cookies.get('aangan_role')?.value === 'founder' ? 'founder' : 'designer';
     headers.set('x-aangan-role', role);

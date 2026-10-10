@@ -91,7 +91,7 @@ Implemented from `services.md`, `qualified.md`, `pricing.md`. Assumptions I had 
 ## Deploy to Vercel
 
 1. Push this folder to a Git repo and import it in Vercel (framework: Next.js; `vercel.json` sets region `bom1`, security headers, no-store caching, and a daily SLA sweep).
-2. Add the environment variables from [`.env.example`](.env.example). **Required in production:** `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GEMINI_API_KEY`, `DESIGNER_PASSWORD`, `FOUNDER_PASSWORD`, `INGEST_API_KEY`, `CRON_SECRET`. The app **refuses to serve** in production without both dashboard passwords.
+2. Add the environment variables from [`.env.example`](.env.example). **Required in production:** `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GEMINI_API_KEY`, `DESIGNER_PASSWORD`, `FOUNDER_PASSWORD`, `INGEST_API_KEY`, `CRON_SECRET`. The app **refuses to serve** in production without both dashboard passwords — unless `PUBLIC_EDIT=true` is set, which runs a password-free demo (no login anywhere on the dashboard; demo or sample data only).
 3. Deploy. Cron: Hobby plans allow daily jobs; on Pro change `vercel.json` to e.g. `*/30 * * * *` for tighter SLA sweeps.
 
 ## Intake API
