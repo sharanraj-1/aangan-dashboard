@@ -1,0 +1,44 @@
+{
+  "name": "aangan-founder-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Founder dashboard and enquiry-intake automation for Aangan Studio",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx scripts/test-guardrails.ts",
+    "seed": "tsx scripts/seed.ts",
+    "seed:reset": "tsx scripts/seed.ts --reset",
+    "gemini:check": "tsx scripts/gemini-check.ts",
+    "ingest:demo": "tsx scripts/ingest-demo.ts",
+    "seed:sql": "tsx scripts/export-seed-sql.ts",
+    "smoke": "tsx scripts/live-smoke.ts",
+    "designers:mock": "tsx scripts/designers-mock.ts",
+    "hubspot:check": "tsx scripts/hubspot-check.ts",
+    "hubspot:backfill": "tsx scripts/hubspot-backfill.ts",
+    "calendar:check": "tsx scripts/google-calendar-check.ts",
+    "voice:check": "tsx scripts/voice-check.ts"
+  },
+  "dependencies": {
+    "@google/genai": "^2.27.0",
+    "@supabase/supabase-js": "^2.117.2",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.20",
+    "dotenv": "^16.4.5",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4.23.15",
+    "typescript": "^5.6.0"
+  },
+  "engines": { "node": ">=20" }
+}
